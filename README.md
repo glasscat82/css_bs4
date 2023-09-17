@@ -147,3 +147,47 @@
 # [<a href="http://example.com">Example link</a>,
 # <a href="http://example.org">Example org link</a>]
 ```
+
+### [attribute!="value"]:
+Ищет HTML-элементы с атрибутом attribute, значение которого НЕ равно value (эквивалентно :not([attribute=value])).
+```
+>>> from bs4 import BeautifulSoup as bs
+>>> html = """
+<body>
+<ul>
+  <li><a href="#internal">Internal link</a></li>
+  <li><a href="http://example.com">Example link</a></li>
+  <li><a href="#InSensitive">Insensitive internal link</a></li>
+  <li><a href="http://example.org">Example org link</a></li>
+</ul>
+</body>
+"""
+>>> soup = bs(html, 'html.parser')
+>>> soup.select('a[href!="#internal"]')
+# или
+>>> soup.select('a:not([href="#internal"])')
+# [<a href="http://example.com">Example link</a>,
+# <a href="#InSensitive">Insensitive internal link</a>,
+# <a href="http://example.org">Example org link</a>]
+```
+
+### [attribute="value" s]:
+Ищет HTML-элементы с атрибутом attribute, значение которого совпадает с value с учетом регистра.
+```
+>>> from bs4 import BeautifulSoup as bs
+>>> html = """
+<body>
+<ul>
+  <li><a href="#internal">Internal link</a></li>
+  <li><a href="http://example.com">Example link</a></li>
+  <li><a href="#InSensitive">Insensitive internal link</a></li>
+  <li><a href="http://example.org">Example org link</a></li>
+</ul>
+</body>
+"""
+>>> soup = bs(html, 'html.parser')
+>>> soup.select('[href="#INTERNAL" s]')
+# []
+>>> soup.select('[href="#internal" s]')
+# [<a href="#internal">Internal link</a>]
+```
